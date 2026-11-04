@@ -4,18 +4,9 @@
   // http://pandoc.org/README.html#pandocs-markdown
   var pandoc = [
     {
-      filter: 'h1',
+      filter: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
       replacement: function (content, node) {
-        var underline = Array(content.length + 1).join('=');
-        return '\n\n' + content + '\n' + underline + '\n\n';
-      }
-    },
-
-    {
-      filter: 'h2',
-      replacement: function (content, node) {
-        var underline = Array(content.length + 1).join('-');
-        return '\n\n' + content + '\n' + underline + '\n\n';
+        return '\n\n## ' + content + '\n\n';
       }
     },
 
@@ -78,9 +69,10 @@
         var url = node.getAttribute('href');
         var titlePart = node.title ? ' "' + node.title + '"' : '';
         if (content === url) {
-          return '<' + url + '>';
+          // Bare URL: always [url](url), never <url>
+          return '[' + url + '](' + url + ')';
         } else if (url === ('mailto:' + content)) {
-          return '<' + content + '>';
+          return '[' + content + '](' + url + ')';
         } else {
           return '[' + content + '](' + url + titlePart + ')';
         }
