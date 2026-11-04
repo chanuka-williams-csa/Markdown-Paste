@@ -1,6 +1,6 @@
 Markdown-Paste
 ==================
-> Note this is a CSA specific version, all URLs use `[]()` formatting and headings use `##`
+> Note this is has a toggle for CSA specific syntax, all URLs use `[]()` formatting and headings use `##`
 
 
 > Easily convert richly formatted text or HTML to
