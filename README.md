@@ -1,5 +1,7 @@
 Markdown-Paste
 ==================
+> Note this is a CSA specific version, all URLs use `[]()` formatting and headings use `##`
+
 
 > Easily convert richly formatted text or HTML to
 > [Markdown](http://daringfireball.net/projects/markdown/syntax).
@@ -14,7 +16,7 @@ Demo
 
 ### Interactive
 
-<http://euangoddard.github.io/clipboard2markdown/>
+<[http://euangoddard.github.io/clipboard2markdown/](https://chanuka-williams-csa.github.io/Markdown-Paste/)>
 
 ### Video
 
