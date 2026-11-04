@@ -4,9 +4,18 @@
   // http://pandoc.org/README.html#pandocs-markdown
   var pandoc = [
     {
-      filter: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+      filter: 'h1',
       replacement: function (content, node) {
-        return '\n\n## ' + content + '\n\n';
+        var underline = Array(content.length + 1).join('=');
+        return '\n\n' + content + '\n' + underline + '\n\n';
+      }
+    },
+
+    {
+      filter: 'h2',
+      replacement: function (content, node) {
+        var underline = Array(content.length + 1).join('-');
+        return '\n\n' + content + '\n' + underline + '\n\n';
       }
     },
 
@@ -69,10 +78,9 @@
         var url = node.getAttribute('href');
         var titlePart = node.title ? ' "' + node.title + '"' : '';
         if (content === url) {
-          // Bare URL: always [url](url), never <url>
-          return '[' + url + '](' + url + ')';
+          return '<' + url + '>';
         } else if (url === ('mailto:' + content)) {
-          return '[' + content + '](' + url + ')';
+          return '<' + content + '>';
         } else {
           return '[' + content + '](' + url + titlePart + ')';
         }
@@ -99,6 +107,47 @@
     }
   ];
 
+  // "CSA syntax": headings always use ##, and links are always [url](url).
+  // These are placed before the pandoc converters so they take precedence.
+  var csa = [
+    {
+      filter: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+      replacement: function (content, node) {
+        return '\n\n## ' + content + '\n\n';
+      }
+    },
+
+    {
+      filter: function (node) {
+        return node.nodeName === 'A' && node.getAttribute('href');
+      },
+      replacement: function (content, node) {
+        var url = node.getAttribute('href');
+        var titlePart = node.title ? ' "' + node.title + '"' : '';
+        if (content === url || url === ('mailto:' + content)) {
+          return '[' + content + '](' + url + ')';
+        }
+        return '[' + content + '](' + url + titlePart + ')';
+      }
+    }
+  ];
+
+  var STORAGE_KEY = 'csaSyntax';
+
+  var csaEnabled = function () {
+    try {
+      return localStorage.getItem(STORAGE_KEY) !== 'off';
+    } catch (e) {
+      return true;
+    }
+  };
+
+  var setCsaEnabled = function (on) {
+    try {
+      localStorage.setItem(STORAGE_KEY, on ? 'on' : 'off');
+    } catch (e) {}
+  };
+
   // http://pandoc.org/README.html#smart-punctuation
   var escape = function (str) {
     return str.replace(/[\u2018\u2019\u00b4]/g, "'")
@@ -119,7 +168,8 @@
   };
 
   var convert = function (str) {
-    return escape(toMarkdown(str, { converters: pandoc, gfm: true }));
+    var converters = csaEnabled() ? csa.concat(pandoc) : pandoc;
+    return escape(toMarkdown(str, { converters: converters, gfm: true }));
   }
 
   var insert = function (myField, myValue) {
@@ -151,6 +201,12 @@
     var pastebin = document.querySelector('#pastebin');
     var output = document.querySelector('#output');
     var wrapper = document.querySelector('#wrapper');
+    var csaToggle = document.querySelector('#csa-toggle');
+
+    csaToggle.checked = csaEnabled();
+    csaToggle.addEventListener('change', function () {
+      setCsaEnabled(csaToggle.checked);
+    });
 
     document.addEventListener('keydown', function (event) {
       if (event.ctrlKey || event.metaKey) {
