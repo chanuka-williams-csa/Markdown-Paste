@@ -16,7 +16,7 @@ Demo
 
 ### Interactive
 
-<[http://euangoddard.github.io/clipboard2markdown/](https://chanuka-williams-csa.github.io/Markdown-Paste/)>
+<https://chanuka-williams-csa.github.io/Markdown-Paste/>
 
 ### Video
 
