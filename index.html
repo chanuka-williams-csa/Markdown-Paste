@@ -23,6 +23,23 @@
                 margin-bottom: 10vh;
                 margin-top: 10vh;
             }
+            #csa-switch {
+                position: fixed;
+                top: 12px;
+                right: 16px;
+                z-index: 10;
+                font-size: 14px;
+                user-select: none;
+            }
+            #csa-switch label {
+                font-weight: normal;
+                cursor: pointer;
+                margin: 0;
+            }
+            #csa-switch input {
+                margin-right: 6px;
+                cursor: pointer;
+            }
             #pastebin {
                 opacity: 0.01;
                 width: 100%;
@@ -58,6 +75,11 @@
         </style>
     </head>
     <body>
+        <div id="csa-switch">
+            <label title="On: headings use ##, links are always [url](url). Off: original behaviour. Applies to the next paste.">
+                <input type="checkbox" id="csa-toggle" checked>CSA syntax
+            </label>
+        </div>
         <div class="container">
             <section id="info">
                 <h1>Paste to Markdown</h1>
