@@ -107,13 +107,13 @@
     }
   ];
 
-  // "CSA syntax": headings always use ##, and links are always [url](url).
+  // "CSA syntax": headings always use ###, and links are always [url](url).
   // These are placed before the pandoc converters so they take precedence.
   var csa = [
     {
       filter: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
       replacement: function (content, node) {
-        return '\n\n## ' + content + '\n\n';
+        return '\n\n### ' + content + '\n\n';
       }
     },
 
